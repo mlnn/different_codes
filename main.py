@@ -1,5 +1,10 @@
 import json
 
+def json_open(name, code):
+    with open(name, encoding = code) as f:
+        news = json.load(f)
+    return news
+
 def listmerge(lstlst):
     all=[]
     for lst in lstlst:
@@ -10,17 +15,13 @@ def listmerge(lstlst):
 def get_list_news(country):
     list_news = []
     if country == 'afr':
-        with open('newsafr.json', encoding = 'UTF-8') as f:
-            news = json.load(f)
+        news = json_open('newsafr.json', 'UTF-8')
     elif country == 'cy':
-        with open('newscy.json', encoding = 'KOI8-R') as f:
-            news = json.load(f)
+        news = json_open('newscy.json', 'KOI8-R')
     elif country == 'fr':
-        with open('newsfr.json', encoding='ISO8859-5') as f:
-            news = json.load(f)
+        news = json_open('newsfr.json', 'ISO8859-5')
     elif country == 'it':
-        with open('newsit.json') as f:
-            news = json.load(f)
+        news = json_open('newsit.json', 'CP1251')
     for new in news['rss']['channel']['items']:
         list_news.append(new['description'].split())
     list_news = listmerge(list_news)
@@ -47,8 +48,8 @@ def print_sort_news(country):
     list_news_long.sort()
     counter = get_counter(list_news_long)
     sort_news = sorted(counter.items(), key=lambda x: x[1])
-    for i in range(10):
-        print(sort_news.pop())
+    for item in sort_news[-10:]:
+        print(item)
 
 print_sort_news('it')
 print("---------------------------")
